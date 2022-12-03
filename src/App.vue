@@ -1,16 +1,22 @@
+<script setup>
+import { ref } from 'vue';
+const showModal =  ref(false);
+const textModal = ref('');
+</script>
+
 <template>
   <main>
     <div class="container">
-      <div class="overlay">
+      <div v-if="showModal" class="overlay">
         <div class="modal">
-          <textarea name="note" id="note" cols="30" rows="10"></textarea>
-          <button>add notes</button>
-          <button class="close">Close</button>
+          <textarea v-model="textModal" name="note" id="note" cols="30" rows="10"></textarea>
+          <button >add notes</button>
+          <button class="close" @click="showModal = !showModal">Close</button>
         </div>
       </div>
       <header>
         <h1>Notes</h1>
-        <button>+</button>
+        <button @click="showModal = !showModal">+</button>
       </header>
       <div class="cards-container">
         <div class="card">
@@ -33,6 +39,7 @@ main {
 }
 .container {
   max-width: 1000px;
+  max-height: 1000px;
   margin: 0 auto;
   padding: 10px;
 }
