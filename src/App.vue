@@ -1,6 +1,13 @@
 <template>
   <main>
     <div class="container">
+      <div class="overlay">
+        <div class="modal">
+          <textarea name="note" id="note" cols="30" rows="10"></textarea>
+          <button>add notes</button>
+          <button class="close">Close</button>
+        </div>
+      </div>
       <header>
         <h1>Notes</h1>
         <button>+</button>
@@ -34,7 +41,7 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-button {
+header button {
  width: 50px;
  height: 50px;
  background-color: rgba(21,20,20);
@@ -76,5 +83,44 @@ h1 {
 
 .cards-container {
   display: flex;flex-wrap: wrap;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.77);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.modal {
+  width: 750px;
+  background-color: #ddd;
+  border-radius: 10px;
+  padding: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+;
+}
+
+.modal button {  
+  padding: 10px 20px;
+  font-size: 20px;
+  width: 100%;
+  background-color: blueviolet;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  margin-top: 15px;
+}
+.modal .close {
+  background-color: rgb(138, 97, 97);
+  margin-top: 7px;
 }
 </style>
