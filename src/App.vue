@@ -1,7 +1,25 @@
 <script setup>
 import { ref } from 'vue';
+
 const showModal =  ref(false);
 const textModal = ref('');
+const Notes = ref([]);
+
+const getRandomColor = () => {
+  return "hsl(" + Math.random() * 360 + ", 100%, 75%)";
+}
+
+const addNote = () => {
+  Notes.value.push({
+    id: Math.floor(Math.random() * 10000000),
+    text: textModal.value,
+    dateNote: new Date(),
+    backgroundColor: getRandomColor()
+  })
+  showModal.value = false;
+  textModal.value = '';
+}
+
 </script>
 
 <template>
@@ -10,7 +28,7 @@ const textModal = ref('');
       <div v-if="showModal" class="overlay">
         <div class="modal">
           <textarea v-model="textModal" name="note" id="note" cols="30" rows="10"></textarea>
-          <button >add notes</button>
+          <button @click="addNote" >add notes</button>
           <button class="close" @click="showModal = !showModal">Close</button>
         </div>
       </div>
@@ -19,13 +37,9 @@ const textModal = ref('');
         <button @click="showModal = !showModal">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
-          <p class="main-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quidem est consequuntur quisquam, minus ullam mollitia molestiae dolorem similique.</p>
-          <p class="date">04/12/5698</p>
-        </div>
-        <div class="card">
-          <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur.</p>
-          <p class="date">04/12/5698</p>
+        <div v-for="{text, dateNote, backgroundColor} in Notes" class="card" :style="{backgroundColor:backgroundColor}">
+          <p class="main-text">{{text}}</p>
+          <p class="date">{{dateNote.toLocaleDateString("en-US")}}</p>
         </div>
       </div>
     </div>
@@ -73,7 +87,6 @@ h1 {
 .card {
   width: 225px;
   height: 225px;
-  background-color: rgba(237, 191,191);
   padding: 10px;  
   border-radius: 15px;
   display: flex;
