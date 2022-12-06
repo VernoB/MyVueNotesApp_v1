@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 const showModal =  ref(false);
 const textModal = ref('');
+const errorMessages = ref('');
 const Notes = ref([]);
 
 const getRandomColor = () => {
@@ -10,6 +11,10 @@ const getRandomColor = () => {
 }
 
 const addNote = () => {
+  if (textModal.value.length < 10) {
+    return errorMessages.value = "Please enter a text with minimun of 10 length.";
+  }
+
   Notes.value.push({
     id: Math.floor(Math.random() * 10000000),
     text: textModal.value,
@@ -18,6 +23,7 @@ const addNote = () => {
   })
   showModal.value = false;
   textModal.value = '';
+  errorMessages.value = '';
 }
 
 </script>
@@ -27,7 +33,8 @@ const addNote = () => {
     <div class="container">
       <div v-if="showModal" class="overlay">
         <div class="modal">
-          <textarea v-model="textModal" name="note" id="note" cols="30" rows="10"></textarea>
+          <textarea v-model.trim="textModal" name="note" id="note" cols="30" rows="10"></textarea>
+          <p v-if="errorMessages">{{errorMessages}}</p>
           <button @click="addNote" >add notes</button>
           <button class="close" @click="showModal = !showModal">Close</button>
         </div>
@@ -37,7 +44,7 @@ const addNote = () => {
         <button @click="showModal = !showModal">+</button>
       </header>
       <div class="cards-container">
-        <div v-for="{text, dateNote, backgroundColor} in Notes" class="card" :style="{backgroundColor:backgroundColor}">
+        <div v-for="{id, text, dateNote, backgroundColor} in Notes" class="card" :style="{backgroundColor:backgroundColor}" :key="id">
           <p class="main-text">{{text}}</p>
           <p class="date">{{dateNote.toLocaleDateString("en-US")}}</p>
         </div>
@@ -53,7 +60,6 @@ main {
 }
 .container {
   max-width: 1000px;
-  max-height: 1000px;
   margin: 0 auto;
   padding: 10px;
 }
@@ -62,21 +68,6 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-header button {
- width: 50px;
- height: 50px;
- background-color: rgba(21,20,20);
-  border: 1px solid #ddd;
-  color: #ddd;
-  border-radius: 50px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-button:hover {
-  animation: ease;
-  transform: scale(1);
-}
 
 h1 {
   font-weight: bold;
@@ -84,31 +75,43 @@ h1 {
   font-size: 75px;
 }
 
+header button {
+  border: none;
+  padding: 10px;
+ width: 50px;
+ height: 50px;
+ background-color: rgba(21,20,20);
+  color: #ddd;
+  border-radius: 100%;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
 .card {
   width: 225px;
   height: 225px;
   padding: 10px;  
   border-radius: 15px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin-right: 20px;
   margin-bottom: 20px;
-  flex-direction: column;
 }
 
 .date {
   font-size: 12px;
-
+  font-weight: bold;
 }
 
 .cards-container {
-  display: flex;flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.77);
@@ -127,6 +130,10 @@ h1 {
   display: flex;
   flex-direction: column;
 ;
+}
+
+.modal p {
+  color: rgb(138, 97, 97);
 }
 
 .modal button {  
